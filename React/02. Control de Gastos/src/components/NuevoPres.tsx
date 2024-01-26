@@ -17,7 +17,7 @@ function NuevoPres(props:Props) {
     (!presupuesto || presupuesto<0) 
         ? setMessage('No es un presupuesto válido') 
         : setIsValidPres(true);
-    }
+  }
 
 
   return ( 

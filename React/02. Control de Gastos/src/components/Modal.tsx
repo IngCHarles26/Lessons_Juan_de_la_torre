@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CerrarBtn from '../assets/cerrar.svg'
 import Mensaje from './Mensaje';
+import { Gasto } from '../App';
 
 interface Props{
   setModal: React.Dispatch<React.SetStateAction<boolean>>,
   animarlModal: boolean,
   setAnimarModal: React.Dispatch<React.SetStateAction<boolean>>,
   saveGasto:(gasto: any) => void,
+  gastoEditar: Gasto;
+  setGastoEditar: React.Dispatch<React.SetStateAction<Gasto>>,
+
 }
 
 const generarId = ()=>{
@@ -17,12 +21,22 @@ const generarId = ()=>{
 
 
 function Modal(props:Props) {
-  const {setModal, animarlModal,setAnimarModal,saveGasto} = props;
+  const {setModal, animarlModal,setAnimarModal,saveGasto,gastoEditar,setGastoEditar} = props;
 
   const [name, setName] = useState('');
   const [monto, setMonto] = useState<number>(NaN);
   const [clase, setClase] = useState('');
   const [message, setMessage] = useState('');
+  const [id, setId] = useState('');
+
+  useEffect(()=>{
+    if(Object.values(gastoEditar).every(el=>el)){
+      setName(gastoEditar.name);
+      setMonto(gastoEditar.monto);
+      setClase(gastoEditar.clase);
+      setId(gastoEditar.id)
+    }
+  },[])
 
   const ocultarModal = ()=>{
     setAnimarModal(false)
@@ -41,7 +55,7 @@ function Modal(props:Props) {
       },3000);
       return;
     }
-    saveGasto({name,monto,clase,id:generarId(),date:Date.now()})
+    saveGasto({name,monto,clase,id:id || generarId(),date:Date.now()})
   }
 
   return ( 
@@ -54,7 +68,7 @@ function Modal(props:Props) {
 
       <form onSubmit={handleSubmit}
             className={`formulario ${animarlModal ? 'animar' : 'cerrar'}`}>
-        <legend>Nuevo Gasto</legend>
+        <legend>{gastoEditar.id ? 'Editar Gasto' : 'Nuevo Gasto'}</legend>
 
         {message && 
           <Mensaje  message={message}
@@ -100,7 +114,7 @@ function Modal(props:Props) {
           </select>
         </div>
         <input  type='submit'
-                value='Añadir Gasto'/>
+                value={gastoEditar.id ? 'Guardar Cambios' : 'Añadir Gasto'}/>
 
       </form>
     </div>

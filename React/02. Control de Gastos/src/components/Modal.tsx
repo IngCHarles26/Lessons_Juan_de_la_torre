@@ -21,7 +21,7 @@ const generarId = ()=>{
 
 
 function Modal(props:Props) {
-  const {setModal, animarlModal,setAnimarModal,saveGasto,gastoEditar,setGastoEditar} = props;
+  const {setModal, animarlModal,setAnimarModal,saveGasto,gastoEditar} = props;
 
   const [name, setName] = useState('');
   const [monto, setMonto] = useState<number>(NaN);
